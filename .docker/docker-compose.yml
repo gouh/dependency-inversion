@@ -1,0 +1,61 @@
+networks:
+  docker:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  web:
+   container_name: di-nginx
+   build:
+    context: ./nginx
+    args:
+      - NGINX_HOST_HTTP_PORTS=${NGINX_HOST_HTTP_PORTS}
+      - PHP_UPSTREAM_CONTAINER=${NGINX_PHP_UPSTREAM_CONTAINER}
+   restart: unless-stopped
+   ports:
+     - ${NGINX_HOST_HTTP_PORT}:80
+   volumes:
+     - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+     - ${NGINX_SITES_PATH}:/etc/nginx/conf.d/
+     - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
+   networks:
+     - docker
+
+  php73:
+    container_name: di-php
+    build:
+      context: ./php
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+    environment:
+      TZ: ${WORKSPACE_TIMEZONE}
+      USERVAR_DB_NAME: 'di'
+      USERVAR_DB_USERNAME: ${MYSQL_USER_NAME}
+      USERVAR_DB_PASSWORD: ${MYSQL_USER_PASSWORD}
+      USERVAR_DB_HOST: 'mysql'
+      USERVAR_DB_PORT: '3306'
+    volumes:
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+    ports:
+      - "${PHP_PORT}:9000"
+    networks:
+      - docker
+
+  mysql:
+    container_name: di-mysql
+    build:
+      context: ./db
+      args:
+        MYSQL_VERSION: ${MYSQL_VERSION}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_PASSWORD: ${MYSQL_USER_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER_NAME}
+      TZ: ${WORKSPACE_TIMEZONE}
+    volumes:
+      - ${DATA_PATH_HOST}/${MYSQL_VERSION}:/var/lib/mysql
+    ports:
+      - "0.0.0.0:3306:3306"
+    networks:
+      - docker
