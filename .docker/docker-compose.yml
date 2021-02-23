@@ -60,3 +60,4 @@ services:
       - "0.0.0.0:3306:3306"
     networks:
       - docker
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
