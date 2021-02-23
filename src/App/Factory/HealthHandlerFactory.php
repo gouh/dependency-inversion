@@ -1,27 +1,23 @@
 <?php
 
-declare(strict_types=1);
+
 namespace App\Factory;
 
+
 use App\DAO\UserDaoPdo;
-use App\Handler\UserHandler;
+use App\Handler\HealthHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-/**
- * Class UserHandlerFactory
- * @package App\Factory
- * @author hangouh <hugohv10@gmail.com>
- */
-class UserHandlerFactory
+class HealthHandlerFactory
 {
     /**
      * @param ContainerInterface $container
-     * @return UserHandler
+     * @return HealthHandler
      */
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
         $userDao = $container->get(UserDaoPdo::class);
-        return new UserHandler($userDao);
+        return new HealthHandler($userDao);
     }
 }

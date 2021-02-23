@@ -12,14 +12,16 @@ use Psr\Container\ContainerInterface;
  */
 return function(ContainerInterface $container) {
     $dispatcherFr = FastRoute\simpleDispatcher(function(RouteCollector $router) {
-        $router->addRoute('GET', '/', App\Handler\HomeHandler::class);
+        (new App\ConfigProvider())->registerRoutes($router, '/');
     });
+
     $dispatcher = new Dispatcher([
         new Middlewares\FastRoute($dispatcherFr),
         new Middlewares\RequestHandler($container)
     ]);
 
     $response = $dispatcher->dispatch(ServerRequestFactory::fromGlobals());
+
     header(
         'HTTP/'. $response->getProtocolVersion()
         . ' ' . $response->getStatusCode()
@@ -29,5 +31,6 @@ return function(ContainerInterface $container) {
         header("{$header}: ". join(';', $value));
     }
     echo $response->getBody();
+
     exit();
 };

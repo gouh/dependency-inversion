@@ -1,30 +1,24 @@
 <?php
 
-declare(strict_types=1);
+
 namespace App\Handler;
 
-use Fig\Http\Message\StatusCodeInterface;
+
+use App\DAO\UserDaoInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use App\DAO\UserDaoInterface;
 
-/**
- * Class UserHandler
- * @package App\Handler
- * @author hangouh <hugohv10@gmail.com>
- */
-class UserHandler implements RequestHandlerInterface
+class HealthHandler implements RequestHandlerInterface
 {
-
     /**
      * @var UserDaoInterface
      */
     private UserDaoInterface $userDao;
 
     /**
-     * UserHandler constructor.
+     * HealthHandler constructor.
      * @param UserDaoInterface $userDao
      */
     public function __construct(UserDaoInterface $userDao)
@@ -38,6 +32,11 @@ class UserHandler implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new JsonResponse($this->userDao->getAllUsers(), StatusCodeInterface::STATUS_OK);
+        # mysql is connection true 'cause is only way to get here
+        return new JsonResponse([
+            'php_version' => phpversion (),
+            'mysql_connection' => true,
+            'time' => time()
+        ]);
     }
 }

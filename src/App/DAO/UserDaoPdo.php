@@ -3,13 +3,29 @@
 declare(strict_types=1);
 namespace App\DAO;
 
+use PDO;
+
 /**
- * Class UserDao
+ * Class UserDaoPdo
  * @package App\DAO
  * @author hangouh <hugohv10@gmail.com>
  */
-class UserDao implements UserDaoInterface
+class UserDaoPdo implements UserDaoInterface
 {
+
+    /**
+     * @var PDO
+     */
+    private PDO $connection;
+
+    /**
+     * UserDaoPdo constructor.
+     * @param PDO $connection
+     */
+    public function __construct(PDO $connection)
+    {
+        $this->connection = $connection;
+    }
 
     public function getByUserId(int $userId): array
     {
