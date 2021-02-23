@@ -29,7 +29,7 @@ services:
         - PHP_VERSION=${PHP_VERSION}
     environment:
       TZ: ${WORKSPACE_TIMEZONE}
-      USERVAR_DB_NAME: 'di'
+      USERVAR_DB_NAME: ${MYSQL_DB}
       USERVAR_DB_USERNAME: 'root'
       USERVAR_DB_PASSWORD: ${MYSQL_USER_PASSWORD}
       USERVAR_DB_HOST: 'mysql'
