@@ -21,7 +21,7 @@ services:
    networks:
      - docker
 
-  php73:
+  php74:
     container_name: di-php
     build:
       context: ./php
@@ -30,7 +30,7 @@ services:
     environment:
       TZ: ${WORKSPACE_TIMEZONE}
       USERVAR_DB_NAME: 'di'
-      USERVAR_DB_USERNAME: ${MYSQL_USER_NAME}
+      USERVAR_DB_USERNAME: 'root'
       USERVAR_DB_PASSWORD: ${MYSQL_USER_PASSWORD}
       USERVAR_DB_HOST: 'mysql'
       USERVAR_DB_PORT: '3306'

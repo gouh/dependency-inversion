@@ -7,19 +7,19 @@ use App\DAO\UserDao;
 use Psr\Container\ContainerInterface;
 
 /**
- * Class HomeHandlerFactory
+ * Class UserHandlerFactory
  * @package App\Handler
  * @author hangouh <hugohv10@gmail.com>
  */
-class HomeHandlerFactory
+class UserHandlerFactory
 {
     /**
      * @param ContainerInterface $container
-     * @return HomeHandler
+     * @return UserHandler
      */
-    public function __invoke(ContainerInterface $container): HomeHandler
+    public function __invoke(ContainerInterface $container): UserHandler
     {
         $userDao = $container->get(UserDao::class);
-        return new HomeHandler($userDao);
+        return new UserHandler($userDao);
     }
 }
